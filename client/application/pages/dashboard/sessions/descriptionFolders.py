@@ -103,9 +103,8 @@ class Folders(ctk.CTkScrollableFrame):
 
             if sort == "pasta":
                 self.master.navigate_to_current_path()
-            elif sort == "arquivo":
+            else:
                 ctrl.openFile(self.master, self, username, self.objPath)
-                self.objPath.go_back()
         except Exception as e:
             util.MessageBox(
                 title="Problema de execussão",
@@ -129,7 +128,7 @@ class Folders(ctk.CTkScrollableFrame):
             self,   # É a referência do descriptionFolder
             self.menu,    # Indica o local (na máquina) onde o menu será criado
             event,    # Indica o evento que disparou o método
-            self.objPath.get_current_path())
+            self.objPath)
 
     def open_menuFile(self, event, forced_widget=None):
         if self.menu is not None and self.menu.winfo_exists():

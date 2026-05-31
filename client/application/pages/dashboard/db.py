@@ -28,25 +28,31 @@ class Dashboard(ctk.CTkFrame):
 
         self.create_sessions(initial_content)
 
-    def create_sessions(self, content):
+    def create_sessions(self, content, rootContent=None):
         """Destrói as sessões antigas e cria novas com o conteúdo atualizado."""
         if self.root_folder_session:
             self.root_folder_session.destroy()
         if self.description_session:
             self.description_session.destroy()
-            
-        self.root_folder_session = rfolder.RootFolders(self, content, self.objPath)
-        self.description_session = dfolder.Folders(self, content, self.objPath)
+
+        if rootContent:
+            self.root_folder_session = rfolder.RootFolders(self, rootContent, self.objPath)
+            self.description_session = dfolder.Folders(self, content, self.objPath)
+        else:
+            self.root_folder_session = rfolder.RootFolders(self, content, self.objPath)
+            self.description_session = dfolder.Folders(self, content, self.objPath)
 
     def navigate_to_current_path(self):
         """
         Método central para navegação. Busca o conteúdo do caminho atual no objPath
         e recria as sessões da interface para exibir o novo conteúdo.
         """
-        path = self.objPath.get_current_path()
-        content = open_data.openFolder(self.username, path)
-        if content:
-            self.create_sessions(content)
+        currentPath = self.objPath.get_current_path()
+        rootPath = self.objPath.get_root_path()
+        content_currentPath = open_data.openFolder(self.username, currentPath)
+        content_rootPath = open_data.openFolder(self.username, rootPath)
+        if content_currentPath and content_rootPath:
+            self.create_sessions(content_currentPath, content_rootPath)
 
     def get_username(self):
         """Método para que outras partes da UI possam acessar o username logado."""
